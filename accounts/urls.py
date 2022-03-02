@@ -11,5 +11,5 @@ urlpatterns = [
     path('update_user/', update_user.as_view()),
     path('change_password/', change_password.as_view()),
     path('add_delete_to_wishlist/', add_delete_wishlist.as_view()),
-    path('add_delete_to_card/', add_delete_cart.as_view())
+    path('add_delete_to_cart/', add_delete_cart.as_view())
 ]
