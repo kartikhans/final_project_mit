@@ -82,3 +82,21 @@ def add_delete_to_cart(user, product, quantity, add=False):
             return "OBJECT_DELETED_SUCCESSFULLY"
         else:
             return "NO_OBJECT_FOUND_CAN'T_DELETE"
+
+
+def user_wishlist(user):
+    wishlist_objects = WishList.objects.filter(user=user, is_deleted=False)
+    product_titles = []
+    if wishlist_objects:
+        for i in wishlist_objects:
+            product_titles.append(i.title)
+    return product_titles
+
+
+def user_cart(user):
+    cart_objects = Cart.objects.filter(user=user, is_deleted=False)
+    product_data = []
+    if cart_objects:
+        for i in cart_objects:
+            product_data.append(dict(title=i.title, quantity=i.quantity))
+    return product_data

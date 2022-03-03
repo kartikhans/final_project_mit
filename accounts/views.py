@@ -8,7 +8,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from .models import User
 from .serializers import UserSignUpRequestSerializer, UserSignInRequestSerializer, ChangePasswordSerializer, \
-    UserProfileSerializer, UpdateUserSerializer, AddDeleteCartSerializer, AddDeleteWishlistSerializer
+    UserProfileSerializer, UpdateUserSerializer, AddDeleteCartSerializer, AddDeleteWishlistSerializer, \
+    UserWishlistSerializer
 from .utils import user_signin, user_profile
 
 
@@ -120,6 +121,30 @@ class add_delete_cart(APIView):
             data = serializer.validated_data
             result = user_profile.add_delete_to_cart(user=data.get('user'), product=data.get('product'),
                                                      quantity=data.get('quantity'), add=data.get('add'))
+            return Response(result, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class user_wishlist(APIView):
+    def post(self, request, format=None):
+        data = JSONParser().parse(request)
+        serializer = UserWishlistSerializer(data=data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+            result = user_profile.user_wishlist(data.get('user'))
+            return Response(result, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class user_cart(APIView):
+    def post(self, request, format=None):
+        data = JSONParser().parse(request)
+        serializer = UserWishlistSerializer(data=data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+            result = user_profile.user_cart(data.get('user'))
             return Response(result, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -75,3 +75,13 @@ class AddDeleteCartSerializer(serializers.Serializer):
         if product_obj:
             return product_obj
         return serializers.ValidationError("product not found")
+
+
+class UserWishlistSerializer(serializers.Serializer):
+    user = serializers.UUIDField(required=True)
+
+    def validate_user(self, value):
+        user_obj = User.objects.filter(uid=value).first()
+        if user_obj:
+            return user_obj
+        return serializers.ValidationError("user not found")
