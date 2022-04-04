@@ -9,8 +9,9 @@ from rest_framework.response import Response
 from .models import User
 from .serializers import UserSignUpRequestSerializer, UserSignInRequestSerializer, ChangePasswordSerializer, \
     UserProfileSerializer, UpdateUserSerializer, AddDeleteCartSerializer, AddDeleteWishlistSerializer, \
-    UserWishlistSerializer
+    UserWishlistSerializer, UserOrderPlaceSerializer, ChangeOrderStatusSerializer
 from .utils import user_signin, user_profile
+from accounts.utils.orders import place_order, change_status
 
 
 class SignUpView(generic.CreateView):
@@ -148,3 +149,30 @@ class user_cart(APIView):
             return Response(result, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PlaceOrder(APIView):
+    def post(self, request, format=None):
+        data = JSONParser().parse(request)
+        serializer = UserOrderPlaceSerializer(data=data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+            result = place_order(data)
+            stat = status.HTTP_200_OK
+        else:
+            result = serializer.errors
+            stat = status.HTTP_400_BAD_REQUEST
+        return Response(result, status=stat)
+
+class change_order_status(APIView):
+    def post(self, request, format=None):
+        data = JSONParser().parse(request)
+        serializer = ChangeOrderStatusSerializer(data=data)
+        if serializer.is_valid():
+            data = serializer.validated_data
+            result = change_status(data)
+            stat = status.HTTP_200_OK
+        else:
+            result = serializer.errors
+            stat = status.HTTP_400_BAD_REQUEST
+        return Response(result, status=stat)
