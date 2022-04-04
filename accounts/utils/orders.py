@@ -7,7 +7,7 @@ def place_order(data):
 
     order_obj = Orders(user=user, product=product)
     order_obj.save()
-    return "ORDER_ADDED_SUCCESSFULLY"
+    return dict(result="ORDER_ADDED_SUCCESSFULLY", order_uid=order_obj.uid)
 
 
 def change_status(data):
